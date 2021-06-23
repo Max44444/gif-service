@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class FSRepository {
@@ -31,7 +32,9 @@ public class FSRepository {
     }
 
     public Optional<File> findFileInFolder(@NonNull File folder, @NonNull String filename) {
-        return Arrays.stream(folder.listFiles(name -> name.equals(filename))).findFirst();
+        return getInnerFiles(folder).stream()
+                .filter(file -> file.getName().equals(filename))
+                .findAny();
     }
 
     public File getIfPresentInFolderOrCreate(@NonNull File folder, @NonNull String filename) throws IOException {
@@ -42,7 +45,7 @@ public class FSRepository {
         }
 
         var newFile = new File(folder, filename);
-        FileUtils.touch(newFile);
+        FileUtils.forceMkdir(newFile);
         return newFile;
     }
 
@@ -64,7 +67,7 @@ public class FSRepository {
                     return gifs.stream()
                             .filter(gif -> FilenameUtils.getExtension(gif.getName()).equals("gif"))
                             .map(gif -> new Gif(gif, file.getName()));
-                }).toList();
+                }).collect(Collectors.toList());
     }
 
 }

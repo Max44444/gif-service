@@ -4,7 +4,6 @@ import com.bsahomework.bsagiphy.entity.Gif;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.List;
 
 @Component
@@ -13,11 +12,9 @@ public class GifsRepository {
     @Autowired
     FSRepository fsRepository;
 
-    public List<File> getAllGifs() {
+    public List<Gif> getAllGifs() {
         var cache = fsRepository.getCacheDirectory();
-        return fsRepository.getGifsFromFolder(cache, "").stream()
-                .map(Gif::getFile)
-                .toList();
+        return fsRepository.getGifsFromFolder(cache, "");
     }
 
 }

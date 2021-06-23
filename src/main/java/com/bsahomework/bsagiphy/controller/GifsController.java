@@ -1,19 +1,23 @@
 package com.bsahomework.bsagiphy.controller;
 
+import com.bsahomework.bsagiphy.service.GifsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.file.Path;
 import java.util.List;
 
 @RestController
-@RequestMapping("gifs")
+@RequestMapping("/gifs")
 public class GifsController {
 
+    @Autowired
+    private GifsService gifsService;
+
     @GetMapping
-    public List<Path> getAllGifs() {
-        return null;
+    public List<String> getAllGifs() {
+        return gifsService.getAllGifsPaths();
     }
 
 }

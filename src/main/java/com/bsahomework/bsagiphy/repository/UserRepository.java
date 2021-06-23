@@ -1,6 +1,5 @@
 package com.bsahomework.bsagiphy.repository;
 
-import com.bsahomework.bsagiphy.dto.HistoryDto;
 import com.bsahomework.bsagiphy.entity.Gif;
 import lombok.NonNull;
 import org.apache.commons.io.FileUtils;
@@ -19,11 +18,11 @@ public class UserRepository {
     private FSRepository fsRepository;
 
     public List<Gif> getAllGifsFromUserDirectory(@NonNull String userId) {
-        var userDirectory = new File(fsRepository.getCacheDirectory(), userId);
+        var userDirectory = new File(fsRepository.getUsersDirectory(), userId);
         return fsRepository.getGifsFromFolder(userDirectory, "");
     }
 
-    public Optional<Gif> findGifByQuery(@NonNull String userId, @NonNull String query) {
+    public Optional<Gif> findUserGifByQuery(@NonNull String userId, @NonNull String query) {
         var queryDirectory = new File(fsRepository.getUsersDirectory(), userId + "/" + query);
         var file = fsRepository.getInnerFiles(queryDirectory).stream().findAny();
         return Gif.fileToGif(file);
@@ -43,7 +42,7 @@ public class UserRepository {
 
     public void cleanUserData(@NonNull String userId) throws IOException {
         var userDirectory = new File(fsRepository.getUsersDirectory(), userId);
-        FileUtils.forceDelete(userDirectory);
+        FileUtils.deleteDirectory(userDirectory);
     }
 
 }

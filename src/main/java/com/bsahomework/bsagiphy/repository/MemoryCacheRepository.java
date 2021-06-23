@@ -5,35 +5,37 @@ import com.bsahomework.bsagiphy.entity.User;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class MemoryCacheRepository {
 
     private final List<User> cacheData = new ArrayList<>();
 
-    public void addGifToUserCache(@NonNull String userId, @NonNull Gif gif) {
+    public void addGifToUserCache(@NonNull Gif gif, @NonNull String userId) {
         var userOpt = findUserInCache(userId);
 
         if (userOpt.isPresent()) {
             userOpt.get().getGifs().add(gif);
         } else {
-            var newUser = new User(userId, Arrays.asList(gif));
+            var newUser = new User(userId, new ArrayList<Gif>(){{add(gif);}});
             cacheData.add(newUser);
         }
     }
 
-    public List<Gif> getUserGifByQuery(@NonNull String userId, @NonNull String query) {
+    public Optional<Gif> findUserGifByQuery(@NonNull String userId, @NonNull String query) {
         var userOpt = findUserInCache(userId);
 
         if (userOpt.isEmpty()) {
-            return List.of();
+            return Optional.empty();
         }
 
         var user = userOpt.get();
         return user.getGifs().stream()
                 .filter(gif -> gif.getQuery().equals(query))
-                .toList();
+                .findAny();
     }
 
     public void resetUserCacheByQuery(@NonNull String userId, @NonNull String query) {

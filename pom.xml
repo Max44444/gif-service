@@ -15,6 +15,23 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>16</java.version>
+        <profiles>
+            <profile>
+                <id>dev</id>
+                <properties>
+                    <activatedProperties>dev</activatedProperties>
+                </properties>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+            </profile>
+            <profile>
+                <id>prod</id>
+                <properties>
+                    <activatedProperties>prod</activatedProperties>
+                </properties>
+            </profile>
+        </profiles>
     </properties>
     <dependencies>
         <dependency>
@@ -63,6 +80,12 @@
             <version>1.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -70,6 +93,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${project.parent.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>

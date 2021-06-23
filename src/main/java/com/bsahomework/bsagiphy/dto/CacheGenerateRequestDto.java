@@ -2,13 +2,13 @@ package com.bsahomework.bsagiphy.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class HistoryDto {
+public class CacheGenerateRequestDto {
 
-    private String date;
     private String query;
-    private String gif;
 
 }

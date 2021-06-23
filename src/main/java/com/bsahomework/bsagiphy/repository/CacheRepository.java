@@ -23,12 +23,6 @@ public class CacheRepository {
         return Gif.fileToGif(file);
     }
 
-    public void addGifToCache(@NonNull Gif gif, @NonNull String query) throws IOException {
-        var cache = fsRepository.getCacheDirectory();
-        var queryDirectory = fsRepository.getIfPresentInFolderOrCreate(cache, query);
-        FileUtils.copyFileToDirectory(gif.getFile(), queryDirectory);
-    }
-
     public List<Gif> getAllCache(@NonNull String query) {
         var cache = fsRepository.getCacheDirectory();
         return fsRepository.getGifsFromFolder(cache, query);
