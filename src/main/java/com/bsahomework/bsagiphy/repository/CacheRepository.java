@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -18,23 +18,9 @@ public class CacheRepository {
     FSRepository fsRepository;
 
     public Optional<Gif> findGifByQuery(@NonNull String query) {
-        var cache = fsRepository.getCacheDirectory();
-        var queryDirectoryOpt = fsRepository.findFileInFolder(cache, query);
-
-        if (queryDirectoryOpt.isEmpty()) {
-            return Optional.empty();
-        }
-
-        var queryDirectory = queryDirectoryOpt.get();
-        var gifsOpt = Optional.ofNullable(queryDirectory.listFiles()).orElse(new File[]{});
-        var file = Arrays.stream(gifsOpt).findAny();
-
-        if (file.isEmpty()) {
-            return Optional.empty();
-        }
-
-        var gif = new Gif(file.get(), Optional.empty(), query);
-        return Optional.of(gif);
+        var queryDirectory = new File(fsRepository.getCacheDirectory(), query);
+        var file = fsRepository.getInnerFiles(queryDirectory).stream().findAny();
+        return Gif.fileToGif(file);
     }
 
     public void addGifToCache(@NonNull Gif gif, @NonNull String query) throws IOException {
@@ -43,5 +29,14 @@ public class CacheRepository {
         FileUtils.copyFileToDirectory(gif.getFile(), queryDirectory);
     }
 
+    public List<Gif> getAllCache(@NonNull String query) {
+        var cache = fsRepository.getCacheDirectory();
+        return fsRepository.getGifsFromFolder(cache, query);
+    }
+
+    public void cleanCache() throws IOException {
+        var cache = fsRepository.getCacheDirectory();
+        FileUtils.cleanDirectory(cache);
+    }
 
 }

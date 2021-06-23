@@ -1,15 +1,16 @@
 package com.bsahomework.bsagiphy.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 @Data
+@AllArgsConstructor
 public class User {
 
     private String id;
-    private Map<String, List<Path>> gifs;
+    private List<Gif> gifs;
 
 }
