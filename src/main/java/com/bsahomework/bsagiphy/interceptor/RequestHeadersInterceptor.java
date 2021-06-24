@@ -18,7 +18,7 @@ public class RequestHeadersInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) throws Exception {
-        if (!"bsa-header".equals(request.getHeader("X-BSA-GIPHY"))) {
+        if (request.getHeader("X-BSA-GIPHY") == null) {
             log.warn(request.getRemoteAddr() + " tried to connect with missing X-BSA-GIPHY header");
             response.sendError(HttpStatus.FORBIDDEN.value(), "Missing X-BSA-GIPHY header");
             return false;
